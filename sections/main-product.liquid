@@ -1,0 +1,326 @@
+{%- assign product = product -%}
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+{%- assign featured_image = current_variant.featured_image | default: product.featured_image -%}
+
+<article class="section" itemscope itemtype="http://schema.org/Product">
+  <div class="container">
+
+    {%- comment -%} Breadcrumb {%- endcomment -%}
+    <nav class="breadcrumb" aria-label="Broodkruimelpad">
+      <a href="{{ routes.root_url }}">Home</a>
+      <span class="breadcrumb__sep" aria-hidden="true">/</span>
+      {% if collection %}
+        <a href="{{ collection.url }}">{{ collection.title }}</a>
+        <span class="breadcrumb__sep" aria-hidden="true">/</span>
+      {% endif %}
+      <span aria-current="page">{{ product.title }}</span>
+    </nav>
+
+    <div class="product-page">
+
+      {%- comment -%} Gallery {%- endcomment -%}
+      <div class="product-gallery">
+        <div class="product-gallery__main" id="product-gallery-main">
+          {% if featured_image %}
+            {{ featured_image | image_url: width: 1000 | image_tag:
+              loading: 'eager',
+              fetchpriority: 'high',
+              alt: featured_image.alt | default: product.title,
+              id: 'product-main-image',
+              itemprop: 'image',
+              sizes: '(min-width: 1024px) 50vw, 100vw'
+            }}
+          {% else %}
+            {{ 'product-1' | placeholder_svg_tag: 'product-gallery__placeholder' }}
+          {% endif %}
+
+          {%- comment -%} Navigation arrows {%- endcomment -%}
+          {% if product.images.size > 1 %}
+            <button class="product-gallery__nav product-gallery__nav--prev" aria-label="Vorige afbeelding">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </button>
+            <button class="product-gallery__nav product-gallery__nav--next" aria-label="Volgende afbeelding">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </button>
+          {% endif %}
+        </div>
+
+        {% if product.images.size > 1 %}
+          <div class="product-gallery__thumbs" role="list" aria-label="Productafbeeldingen">
+            {% for image in product.images limit: 8 %}
+              <button
+                class="product-gallery__thumb{% if forloop.first %} active{% endif %}"
+                role="listitem"
+                aria-label="Afbeelding {{ forloop.index }}"
+                aria-current="{% if forloop.first %}true{% else %}false{% endif %}"
+              >
+                {{ image | image_url: width: 120 | image_tag: loading: 'lazy', alt: image.alt | default: product.title }}
+              </button>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+
+      {%- comment -%} Product Info {%- endcomment -%}
+      <div class="product-info" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+        <meta itemprop="priceCurrency" content="{{ shop.currency }}">
+        <meta itemprop="price" content="{{ current_variant.price | divided_by: 100.0 }}">
+        <link itemprop="availability" href="http://schema.org/{% if current_variant.available %}InStock{% else %}OutOfStock{% endif %}">
+
+        {%- comment -%} Brand & Rating {%- endcomment -%}
+        <div class="product-info__brand">
+          {% if product.vendor != blank %}
+            <p class="eyebrow" itemprop="brand">{{ product.vendor }}</p>
+          {% endif %}
+          {% if section.settings.show_rating %}
+            <div class="product-info__rating" aria-label="4.8 van de 5 sterren op basis van 47 beoordelingen">
+              <div class="rating-stars" aria-hidden="true">★★★★★</div>
+              <span class="rating-count">4.8 (47)</span>
+            </div>
+          {% endif %}
+        </div>
+
+        <h1 class="product-info__title" itemprop="name">{{ product.title }}</h1>
+
+        {%- comment -%} Pricing {%- endcomment -%}
+        <div class="product-info__pricing">
+          <span class="product-info__price{% if current_variant.compare_at_price > current_variant.price %} product-info__price--sale{% endif %}" id="product-price">
+            {{ current_variant.price | money }}
+          </span>
+          {% if current_variant.compare_at_price > current_variant.price %}
+            <span class="product-info__price--compare" id="product-compare-price">{{ current_variant.compare_at_price | money }}</span>
+            <span class="product-info__price-badge">
+              -{{ current_variant.compare_at_price | minus: current_variant.price | times: 100 | divided_by: current_variant.compare_at_price }}%
+            </span>
+          {% endif %}
+        </div>
+
+        {%- comment -%} Product Form {%- endcomment -%}
+        <form action="{{ routes.cart_add_url }}" method="post" class="product-form" id="product-form" novalidate>
+          <input type="hidden" name="id" value="{{ current_variant.id }}">
+
+          <div class="product-variants">
+            {%- for option in product.options_with_values -%}
+              <div class="variant-group" data-option-index="{{ forloop.index0 }}">
+                <div class="variant-group__label">
+                  <span class="variant-group__label-name">
+                    {{ option.name }}:
+                    <span class="variant-group__label-value" id="selected-{{ option.name | handleize }}">
+                      {{ current_variant.options[forloop.index0] }}
+                    </span>
+                  </span>
+                  {% if option.name == 'Maat' or option.name == 'Size' %}
+                    <button type="button" class="size-guide-link" data-open-size-guide aria-label="Maattabel openen">
+                      Maattabel
+                    </button>
+                  {% endif %}
+                </div>
+
+                <div class="size-options" role="group" aria-label="{{ option.name }}">
+                  {%- for value in option.values -%}
+                    {%- assign variant_for_value = product.variants | where: "option{{ forloop.parentloop.index }}", value | first -%}
+                    <button
+                      type="button"
+                      class="size-option{% if current_variant.options[forloop.parentloop.index0] == value %} selected{% endif %}{% unless variant_for_value.available %} unavailable{% endunless %}"
+                      data-value="{{ value }}"
+                      data-option-index="{{ forloop.parentloop.index0 }}"
+                      data-variant-id="{{ variant_for_value.id }}"
+                      data-price="{{ variant_for_value.price }}"
+                      data-compare-price="{{ variant_for_value.compare_at_price }}"
+                      {% unless variant_for_value.available %}aria-disabled="true"{% endunless %}
+                      aria-label="{{ option.name }} {{ value }}{% unless variant_for_value.available %} — uitverkocht{% endunless %}"
+                    >
+                      {{ value }}
+                    </button>
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+
+          {%- comment -%} Bundle Upsell {%- endcomment -%}
+          {% if section.settings.show_bundle and section.settings.bundle_products != blank %}
+            <div class="bundle-upsell" data-base-price="{{ current_variant.price }}">
+              <div class="bundle-upsell__header">
+                <span class="bundle-upsell__title">🎯 Compleet je outfit</span>
+                <span class="bundle-upsell__saving">Bespaar 10%</span>
+              </div>
+              <div class="bundle-upsell__items">
+                {%- for bundle_product in section.settings.bundle_products -%}
+                  <label class="bundle-upsell__item selected">
+                    <div class="bundle-upsell__item-check">✓</div>
+                    {{ bundle_product.featured_image | image_url: width: 80 | image_tag:
+                      class: 'bundle-upsell__item-img',
+                      loading: 'lazy',
+                      alt: bundle_product.title
+                    }}
+                    <div class="bundle-upsell__item-info">
+                      <div class="bundle-upsell__item-name">{{ bundle_product.title | truncate: 28 }}</div>
+                      <div class="bundle-upsell__item-price">{{ bundle_product.price | money }}</div>
+                    </div>
+                    <input type="checkbox" name="bundle_item[]" value="{{ bundle_product.variants.first.id }}" checked style="display:none">
+                  </label>
+                {%- endfor -%}
+              </div>
+              <div class="bundle-upsell__total">
+                <span class="bundle-upsell__total-label">Totaal bundel:</span>
+                <span class="bundle-upsell__total-price" id="bundle-total">{{ current_variant.price | money }}</span>
+              </div>
+            </div>
+          {% endif %}
+
+          {%- comment -%} Quantity {%- endcomment -%}
+          <div class="quantity-selector" aria-label="Aantal">
+            <button type="button" class="quantity-btn" data-action="decrease" aria-label="Minder">−</button>
+            <input type="number" name="quantity" value="1" min="1" max="99" class="quantity-input" aria-label="Aantal">
+            <button type="button" class="quantity-btn" data-action="increase" aria-label="Meer">+</button>
+          </div>
+
+          <button
+            type="submit"
+            class="add-to-cart-btn"
+            {% unless current_variant.available %}disabled{% endunless %}
+            aria-label="Toevoegen aan winkelwagen"
+          >
+            {% if current_variant.available %}
+              In winkelwagen — {{ current_variant.price | money }}
+            {% else %}
+              Uitverkocht
+            {% endif %}
+          </button>
+
+          {% if section.settings.show_buy_now %}
+            <button type="button" class="buy-now-btn" onclick="this.closest('form').action='{{ routes.cart_url }}'; this.closest('form').submit();">
+              Direct bestellen
+            </button>
+          {% endif %}
+        </form>
+
+        {%- comment -%} Product USPs {%- endcomment -%}
+        <div class="product-usps" aria-label="Voordelen">
+          <div class="product-usp">
+            <span class="product-usp__icon" aria-hidden="true">🚚</span>
+            <span class="product-usp__text">Gratis<br>verzending</span>
+          </div>
+          <div class="product-usp">
+            <span class="product-usp__icon" aria-hidden="true">↩️</span>
+            <span class="product-usp__text">30 dagen<br>retour</span>
+          </div>
+          <div class="product-usp">
+            <span class="product-usp__icon" aria-hidden="true">🛡️</span>
+            <span class="product-usp__text">2 jaar<br>garantie</span>
+          </div>
+        </div>
+
+        {%- comment -%} Accordion {%- endcomment -%}
+        <div class="product-accordion" role="list">
+          {% if product.description != blank %}
+            <div class="accordion-item" role="listitem">
+              <button class="accordion-trigger" aria-expanded="false" aria-controls="accordion-description">
+                Productbeschrijving
+                <span class="accordion-icon" aria-hidden="true">+</span>
+              </button>
+              <div class="accordion-content" id="accordion-description" role="region">
+                <div class="accordion-body" itemprop="description">{{ product.description }}</div>
+              </div>
+            </div>
+          {% endif %}
+
+          <div class="accordion-item" role="listitem">
+            <button class="accordion-trigger" aria-expanded="false" aria-controls="accordion-size">
+              Maat & pasvorm
+              <span class="accordion-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="accordion-content" id="accordion-size" role="region">
+              <div class="accordion-body">
+                <p>Onze schoenen vallen normaal qua maat. Als je tussen twee maten zit, raden wij aan de grotere maat te kiezen.</p>
+                <ul>
+                  <li>Beschikbaar in EU-maten 36–48</li>
+                  <li>Breedte: standaard (D/B)</li>
+                  <li>Zie onze <button type="button" data-open-size-guide style="text-decoration:underline;background:none;border:none;cursor:pointer;font-size:inherit;padding:0;">maattabel</button> voor exacte afmetingen</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" role="listitem">
+            <button class="accordion-trigger" aria-expanded="false" aria-controls="accordion-shipping">
+              Verzending & retour
+              <span class="accordion-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="accordion-content" id="accordion-shipping" role="region">
+              <div class="accordion-body">
+                <ul>
+                  <li>🚚 Gratis verzending bij bestellingen boven €75</li>
+                  <li>📦 Besteld voor 22:00? Morgen in huis!</li>
+                  <li>↩️ 30 dagen retourrecht — geen vragen gesteld</li>
+                  <li>🔒 Veilig betalen met iDEAL, Visa, PayPal en meer</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          {% if product.metafields.custom.care_instructions != blank %}
+            <div class="accordion-item" role="listitem">
+              <button class="accordion-trigger" aria-expanded="false" aria-controls="accordion-care">
+                Onderhoud
+                <span class="accordion-icon" aria-hidden="true">+</span>
+              </button>
+              <div class="accordion-content" id="accordion-care" role="region">
+                <div class="accordion-body">{{ product.metafields.custom.care_instructions }}</div>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+
+      </div>
+    </div>
+  </div>
+</article>
+
+{% schema %}
+{
+  "name": "Productpagina",
+  "tag": "section",
+  "class": "main-product-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "label": "Beoordeling tonen",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_buy_now",
+      "label": "Direct bestellen knop tonen",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Bundel upsell"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_bundle",
+      "label": "Bundel upsell tonen",
+      "default": false
+    },
+    {
+      "type": "product_list",
+      "id": "bundle_products",
+      "label": "Bundel producten",
+      "limit": 3
+    }
+  ],
+  "presets": [
+    {
+      "name": "Productpagina"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,137 @@
+{
+  "general": {
+    "accessibility": {
+      "skip_to_content": "Sla navigatie over",
+      "close_modal": "Venster sluiten",
+      "close_menu": "Menu sluiten",
+      "open_menu": "Menu openen"
+    },
+    "currency": {
+      "euro": "Euro (€)"
+    }
+  },
+  "layout": {
+    "header": {
+      "cart": "Winkelwagen",
+      "search": "Zoeken",
+      "account": "Account"
+    },
+    "footer": {
+      "copyright": "Alle rechten voorbehouden"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "In winkelwagen",
+      "sold_out": "Uitverkocht",
+      "unavailable": "Niet beschikbaar",
+      "buy_it_now": "Direct bestellen",
+      "quantity": "Aantal",
+      "size": "Maat",
+      "color": "Kleur",
+      "size_chart": "Maattabel",
+      "description": "Productbeschrijving",
+      "shipping": "Verzending & retour",
+      "share": "Delen",
+      "vendor": "Merk",
+      "sku": "Artikelnummer",
+      "from_price_html": "Vanaf {{ price }}",
+      "on_sale": "Sale",
+      "regular_price": "Reguliere prijs",
+      "sale_price": "Aanbiedingsprijs",
+      "compare_at_price": "Was {{ price }}"
+    },
+    "facets": {
+      "filters": "Filters",
+      "sort_by": "Sorteren op",
+      "clear_all": "Alles wissen",
+      "filter_by": "Filteren op {{ value }}",
+      "apply": "Toepassen",
+      "from": "Van",
+      "to": "Tot"
+    }
+  },
+  "cart": {
+    "general": {
+      "title": "Winkelwagen",
+      "empty": "Je winkelwagen is leeg",
+      "subtotal": "Subtotaal",
+      "total": "Totaal",
+      "checkout": "Afrekenen",
+      "continue_shopping": "Verder winkelen",
+      "note": "Opmerking bij bestelling",
+      "savings": "Je bespaart {{ amount }}",
+      "add_order_note": "Voeg een opmerking toe"
+    },
+    "items": {
+      "remove": "Verwijder",
+      "quantity": "Aantal",
+      "item_count": "{{ count }} artikel",
+      "item_count_plural": "{{ count }} artikelen"
+    }
+  },
+  "collections": {
+    "general": {
+      "title": "Collecties",
+      "products_count_simple": "{{ count }} producten",
+      "show_more": "Meer laden",
+      "no_matches": "Geen producten gevonden"
+    }
+  },
+  "customer": {
+    "login": {
+      "title": "Inloggen",
+      "email": "E-mailadres",
+      "password": "Wachtwoord",
+      "forgot_password": "Wachtwoord vergeten?",
+      "sign_in": "Inloggen",
+      "guest": "Als gast verder",
+      "create_account": "Account aanmaken"
+    },
+    "register": {
+      "title": "Account aanmaken",
+      "first_name": "Voornaam",
+      "last_name": "Achternaam",
+      "email": "E-mailadres",
+      "password": "Wachtwoord",
+      "submit": "Registreren"
+    },
+    "account": {
+      "title": "Mijn account",
+      "orders": "Bestellingen",
+      "addresses": "Adressen",
+      "logout": "Uitloggen"
+    }
+  },
+  "newsletter": {
+    "label": "E-mailadres",
+    "success": "Bedankt voor je aanmelding!",
+    "already_subscribed": "Je bent al aangemeld."
+  },
+  "search": {
+    "placeholder": "Zoek schoenen, merken...",
+    "title": "Zoekresultaten voor",
+    "no_results": "Geen resultaten gevonden voor",
+    "popular": "Populaire zoekopdrachten"
+  },
+  "errors": {
+    "404": {
+      "title": "Pagina niet gevonden",
+      "message": "De pagina die je zoekt bestaat niet meer of is verplaatst."
+    }
+  },
+  "shipping": {
+    "free_shipping_message": "Gratis verzending bij bestellingen boven",
+    "days": "werkdagen",
+    "policy": "Verzendbeleid"
+  },
+  "accessibility": {
+    "loading": "Laden...",
+    "next": "Volgende",
+    "previous": "Vorige",
+    "open": "Openen",
+    "close": "Sluiten",
+    "required": "Verplicht",
+    "optional": "Optioneel"
+  }
+}

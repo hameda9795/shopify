@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="{{ request.locale.iso_code }}" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0D0D0D">
+  <meta name="format-detection" content="telephone=no">
+
+  <title>
+    {{ page_title }}
+    {%- if current_tags %} &ndash; {{ current_tags | join: ', ' }}{%- endif -%}
+    {%- if current_page != 1 %} &ndash; Pagina {{ current_page }}{%- endif -%}
+    {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{%- endunless -%}
+  </title>
+
+  {%- if page_description -%}
+    <meta name="description" content="{{ page_description | escape }}">
+  {%- endif -%}
+
+  {%- render 'open-graph-tags' -%}
+
+  {{ content_for_header }}
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
+
+  <script>document.documentElement.classList.remove('no-js');</script>
+</head>
+
+<body class="template-{{ template.name }}{% if template.suffix != blank %} template-{{ template.name }}-{{ template.suffix }}{% endif %}">
+
+  <a class="skip-to-content-link" href="#MainContent">Sla navigatie over</a>
+
+  {%- section 'announcement-bar' -%}
+  {%- section 'header' -%}
+
+  <div id="cart-drawer" class="cart-drawer" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Winkelwagen">
+    {%- section 'cart-drawer' -%}
+  </div>
+  <div class="cart-overlay" id="cart-overlay"></div>
+
+  <div id="search-overlay" class="search-overlay" aria-hidden="true">
+    <div class="search-overlay__inner">
+      <button class="search-overlay__close" aria-label="Zoeken sluiten">
+        {%- render 'icon', icon: 'close' -%}
+      </button>
+      <form action="/search" method="get" class="search-overlay__form">
+        <input type="hidden" name="type" value="product">
+        <input type="search" name="q" class="search-overlay__input" placeholder="Zoek schoenen, merken..." autocomplete="off" spellcheck="false">
+        <button type="submit" class="search-overlay__submit" aria-label="Zoeken">
+          {%- render 'icon', icon: 'search' -%}
+        </button>
+      </form>
+      <div class="search-overlay__popular">
+        <p class="search-overlay__popular-label">Populair</p>
+        <div class="search-overlay__popular-tags">
+          <a href="/collections/running">Hardlopen</a>
+          <a href="/collections/training">Training</a>
+          <a href="/collections/walk-set">Walk Set</a>
+          <a href="/collections/sale">Sale</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main id="MainContent" role="main" tabindex="-1">
+    {{ content_for_layout }}
+  </main>
+
+  {%- section 'footer' -%}
+
+  {%- render 'size-guide-modal' -%}
+
+  <div class="scroll-to-top" id="scroll-to-top" aria-label="Terug naar boven">
+    {%- render 'icon', icon: 'arrow-up' -%}
+  </div>
+
+  {{ 'theme.js' | asset_url | script_tag }}
+
+</body>
+</html>

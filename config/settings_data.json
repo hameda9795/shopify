@@ -1,0 +1,15 @@
+{
+  "current": {
+    "color_background": "#F8F6F3",
+    "color_black": "#0D0D0D",
+    "color_accent": "#0D0D0D",
+    "color_text": "#0D0D0D",
+    "color_border": "#E4E1DC",
+    "font_heading": "inter_n7",
+    "font_body": "inter_n4",
+    "font_size_base": 16,
+    "container_max_width": 1440,
+    "animations_enabled": true,
+    "cart_drawer_enabled": true
+  }
+}

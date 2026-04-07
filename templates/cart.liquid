@@ -1,0 +1,108 @@
+{% layout 'theme' %}
+
+<section class="section">
+  <div class="container" style="max-width:900px;">
+    <h1 class="heading-lg" style="margin-bottom:var(--space-xl);">Winkelwagen</h1>
+
+    {% if cart.item_count > 0 %}
+      <form action="{{ routes.cart_url }}" method="post" novalidate>
+        <div style="display:grid;gap:var(--space-xl);">
+
+          {%- comment -%} Cart Items {%- endcomment -%}
+          <div>
+            {% for item in cart.items %}
+              <div class="cart-item" style="padding:var(--space-lg) 0;" data-key="{{ item.key }}">
+                <a href="{{ item.url }}">
+                  {{ item.image | image_url: width: 200 | image_tag:
+                    class: 'cart-item__img',
+                    loading: 'lazy',
+                    alt: item.title,
+                    style: 'width:100px;height:100px;border-radius:12px;'
+                  }}
+                </a>
+                <div class="cart-item__info">
+                  <a href="{{ item.url }}" class="cart-item__title" style="font-size:1rem;">{{ item.product_title }}</a>
+                  {% if item.variant.title != 'Default Title' %}
+                    <div class="cart-item__variant">{{ item.variant.title }}</div>
+                  {% endif %}
+                  {% if item.properties != blank %}
+                    {% for p in item.properties %}
+                      {% unless p.last == blank %}
+                        <div class="cart-item__variant">{{ p.first }}: {{ p.last }}</div>
+                      {% endunless %}
+                    {% endfor %}
+                  {% endif %}
+                  <div class="cart-item__bottom">
+                    <div class="quantity-selector" style="width:fit-content;">
+                      <button type="button" class="quantity-btn" onclick="updateCartItem('{{ item.key }}', {{ item.quantity | minus: 1 }})" aria-label="Minder">−</button>
+                      <input type="number" name="updates[]" value="{{ item.quantity }}" min="0" class="quantity-input" aria-label="Aantal">
+                      <button type="button" class="quantity-btn" onclick="updateCartItem('{{ item.key }}', {{ item.quantity | plus: 1 }})" aria-label="Meer">+</button>
+                    </div>
+                    <div class="cart-item__price" style="font-size:1.125rem;">{{ item.final_line_price | money }}</div>
+                    <a href="{{ routes.cart_change_url }}?id={{ item.key }}&quantity=0" class="cart-item__remove" aria-label="{{ item.title }} verwijderen">Verwijder</a>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+
+          {%- comment -%} Order Note {%- endcomment -%}
+          <div>
+            <label for="cart-note" style="display:block;font-size:.875rem;font-weight:600;margin-bottom:.5rem;">Opmerking bij bestelling</label>
+            <textarea id="cart-note" name="note" rows="3" style="width:100%;padding:.875rem;border:1.5px solid var(--color-border);border-radius:var(--radius-md);font-family:inherit;font-size:.875rem;outline:none;resize:vertical;">{{ cart.note }}</textarea>
+          </div>
+
+          {%- comment -%} Totals {%- endcomment -%}
+          <div style="background:var(--color-white);border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:var(--space-xl);display:flex;flex-direction:column;gap:1rem;">
+            <h2 style="font-size:1.125rem;font-weight:700;">Overzicht</h2>
+            <div style="display:flex;flex-direction:column;gap:.75rem;">
+              <div style="display:flex;justify-content:space-between;font-size:.9375rem;">
+                <span style="color:var(--color-mid);">Subtotaal ({{ cart.item_count }} {% if cart.item_count == 1 %}artikel{% else %}artikelen{% endif %})</span>
+                <span style="font-weight:600;">{{ cart.total_price | money }}</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:.875rem;color:var(--color-mid);">
+                <span>Verzendkosten</span>
+                <span>{% if cart.total_price >= 7500 %}Gratis{% else %}Berekend bij afrekenen{% endif %}</span>
+              </div>
+              <div style="height:1px;background:var(--color-border);"></div>
+              <div style="display:flex;justify-content:space-between;font-size:1.125rem;font-weight:800;">
+                <span>Totaal</span>
+                <span>{{ cart.total_price | money }}</span>
+              </div>
+            </div>
+            <button type="submit" name="checkout" class="btn btn-primary btn-full btn-lg">
+              Afrekenen →
+            </button>
+            <a href="{{ routes.root_url }}collections/all" style="text-align:center;font-size:.875rem;color:var(--color-mid);text-decoration:underline;">Verder winkelen</a>
+            <div style="display:flex;align-items:center;justify-content:center;gap:.5rem;font-size:.75rem;color:var(--color-mid);">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                <path d="M7 1L2 3.5V7c0 3 2.5 5.5 5 6 2.5-.5 5-3 5-6V3.5L7 1z" stroke="currentColor" stroke-width="1.2" fill="none"/>
+                <path d="M4.5 7l2 2 3-3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+              </svg>
+              SSL beveiligd · Veilig betalen
+            </div>
+          </div>
+
+        </div>
+      </form>
+    {% else %}
+      <div style="text-align:center;padding:var(--space-4xl) 0;">
+        <div style="font-size:5rem;margin-bottom:var(--space-md);" aria-hidden="true">🛒</div>
+        <h2 style="font-size:1.5rem;font-weight:700;margin-bottom:.75rem;">Je winkelwagen is leeg</h2>
+        <p style="color:var(--color-mid);margin-bottom:var(--space-lg);">Ontdek onze collectie premium sportschoenen.</p>
+        <a href="{{ routes.root_url }}collections/all" class="btn btn-primary btn-lg">Bekijk collectie</a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<script>
+async function updateCartItem(key, qty) {
+  const res = await fetch('/cart/change.js', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id: key, quantity: Math.max(0, qty) })
+  });
+  if (res.ok) window.location.reload();
+}
+</script>

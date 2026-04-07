@@ -1,0 +1,89 @@
+<section class="newsletter" aria-label="Nieuwsbrief">
+  <div class="container">
+    <div class="newsletter__inner">
+      <div>
+        <p class="eyebrow animate-fade-up" style="color:rgba(255,255,255,0.5);">{{ section.settings.eyebrow | default: 'Blijf op de hoogte' }}</p>
+        <h2 class="heading-md newsletter__title animate-fade-up" data-delay="100" style="margin-top:.5rem;">
+          {{ section.settings.title | default: 'Meld je aan voor exclusieve aanbiedingen' }}
+        </h2>
+        {% if section.settings.subtitle != blank %}
+          <p class="newsletter__subtitle animate-fade-up" data-delay="200">{{ section.settings.subtitle }}</p>
+        {% endif %}
+      </div>
+
+      <form action="{{ routes.root_url }}contact#newsletter-form" method="post" class="newsletter__form animate-fade-up" data-delay="300" id="newsletter-form">
+        <input type="hidden" name="form_type" value="customer">
+        <input type="hidden" name="utf8" value="✓">
+        <input type="hidden" name="contact[tags]" value="newsletter">
+
+        <input
+          type="email"
+          name="contact[email]"
+          class="newsletter__input"
+          placeholder="{{ section.settings.placeholder | default: 'Jouw e-mailadres' }}"
+          required
+          autocomplete="email"
+          aria-label="E-mailadres"
+        >
+        <button type="submit" class="btn btn-white">
+          {{ section.settings.button_text | default: 'Aanmelden' }}
+        </button>
+      </form>
+
+      {% if section.settings.disclaimer != blank %}
+        <p class="newsletter__disclaimer animate-fade-up" data-delay="400">{{ section.settings.disclaimer }}</p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Nieuwsbrief",
+  "tag": "section",
+  "class": "newsletter-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Bovenste label",
+      "default": "Blijf op de hoogte"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titel",
+      "default": "Meld je aan voor exclusieve aanbiedingen"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Ondertitel",
+      "default": "Ontvang als eerste nieuws over nieuwe collecties, exclusieve aanbiedingen en hardlooptips."
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Invoerveld placeholder",
+      "default": "Jouw e-mailadres"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Knoptekst",
+      "default": "Aanmelden"
+    },
+    {
+      "type": "text",
+      "id": "disclaimer",
+      "label": "Disclaimer",
+      "default": "Je kunt je altijd afmelden. We respecteren je privacy."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Nieuwsbrief"
+    }
+  ]
+}
+{% endschema %}

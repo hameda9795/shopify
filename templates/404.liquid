@@ -1,0 +1,15 @@
+{% layout 'theme' %}
+
+<section class="section" style="min-height:70vh;display:flex;align-items:center;">
+  <div class="container" style="text-align:center;max-width:560px;margin:0 auto;">
+    <p style="font-size:8rem;font-weight:900;letter-spacing:-0.05em;color:var(--color-bg-alt);line-height:1;margin-bottom:var(--space-lg);">404</p>
+    <h1 class="heading-md" style="margin-bottom:.75rem;">Pagina niet gevonden</h1>
+    <p style="color:var(--color-mid);font-size:1rem;line-height:1.7;margin-bottom:var(--space-xl);">
+      De pagina die je zoekt bestaat niet meer of is verplaatst. Ga terug naar de startpagina of zoek in onze collectie.
+    </p>
+    <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;">
+      <a href="{{ routes.root_url }}" class="btn btn-primary">Naar startpagina</a>
+      <a href="/collections/all" class="btn btn-outline">Bekijk collectie</a>
+    </div>
+  </div>
+</section>

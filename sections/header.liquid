@@ -1,0 +1,148 @@
+<header class="site-header" role="banner" id="site-header">
+  <div class="site-header__inner">
+
+    {%- comment -%} Mobile menu toggle {%- endcomment -%}
+    <button class="mobile-menu-toggle" aria-label="Menu openen" aria-expanded="false" aria-controls="mobile-menu">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 6h16M3 11h16M3 16h16" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+      </svg>
+    </button>
+
+    {%- comment -%} Logo {%- endcomment -%}
+    <div class="site-header__logo">
+      <a href="{{ routes.root_url }}" aria-label="{{ shop.name }} — Startpagina">
+        {%- if section.settings.logo != blank -%}
+          {{ section.settings.logo | image_url: width: 200 | image_tag: loading: 'eager', alt: shop.name, class: 'site-header__logo-img' }}
+        {%- else -%}
+          <span class="site-header__logo-text">{{ shop.name | upcase }}</span>
+        {%- endif -%}
+      </a>
+    </div>
+
+    {%- comment -%} Desktop navigation {%- endcomment -%}
+    <nav class="site-nav" aria-label="Hoofdnavigatie">
+      <ul class="site-nav__list" role="list">
+        {% for link in linklists[section.settings.menu].links %}
+          <li class="site-nav__item{% if link.links.size > 0 %} has-dropdown{% endif %}">
+            <a
+              href="{{ link.url }}"
+              class="site-nav__link{% if link.active or link.child_active %} active{% endif %}"
+              {% if link.links.size > 0 %}aria-haspopup="true" aria-expanded="false"{% endif %}
+            >
+              {{ link.title }}
+              {% if link.links.size > 0 %}
+                <svg width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+                  <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              {% endif %}
+            </a>
+            {% if link.links.size > 0 %}
+              <div class="site-nav__dropdown" role="menu">
+                {% for child_link in link.links %}
+                  <a href="{{ child_link.url }}" class="site-nav__dropdown-link" role="menuitem">{{ child_link.title }}</a>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+
+    {%- comment -%} Action buttons {%- endcomment -%}
+    <div class="site-header__actions">
+      <button
+        class="site-header__action-btn"
+        data-open-search
+        aria-label="Zoeken"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        {%- render 'icon', icon: 'search' -%}
+      </button>
+
+      <a href="{{ routes.account_url }}" class="site-header__action-btn hide-mobile" aria-label="Mijn account">
+        {%- render 'icon', icon: 'account' -%}
+      </a>
+
+      <button class="site-header__action-btn" data-open-cart aria-label="Winkelwagen openen">
+        {%- render 'icon', icon: 'cart' -%}
+        <span class="cart-count" aria-label="Producten in winkelwagen" style="display:none">0</span>
+      </button>
+    </div>
+
+  </div>
+</header>
+
+{%- comment -%} Mobile Menu {%- endcomment -%}
+<nav class="mobile-menu" id="mobile-menu" aria-label="Mobiele navigatie" aria-hidden="true">
+  <div class="mobile-menu__header">
+    <span class="site-header__logo-text">{{ shop.name | upcase }}</span>
+    <button class="mobile-menu__close" aria-label="Menu sluiten">
+      {%- render 'icon', icon: 'close' -%}
+    </button>
+  </div>
+
+  <div class="mobile-menu__nav">
+    {% for link in linklists[section.settings.menu].links %}
+      {% if link.links.size > 0 %}
+        <button class="mobile-menu__link" data-has-children aria-expanded="false">
+          {{ link.title }}
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <div class="mobile-menu__sub" style="display:none">
+          {% for child_link in link.links %}
+            <a href="{{ child_link.url }}" class="mobile-menu__sub-link">{{ child_link.title }}</a>
+          {% endfor %}
+        </div>
+      {% else %}
+        <a href="{{ link.url }}" class="mobile-menu__link">{{ link.title }}</a>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <div class="mobile-menu__footer">
+    <div style="display:flex;flex-direction:column;gap:.625rem;">
+      <a href="{{ routes.account_url }}" class="site-footer__link">Mijn account</a>
+      <a href="{{ routes.root_url }}pages/contact" class="site-footer__link">Contact</a>
+      <a href="{{ routes.root_url }}pages/faq" class="site-footer__link">Veelgestelde vragen</a>
+    </div>
+  </div>
+</nav>
+
+{% schema %}
+{
+  "name": "Header",
+  "tag": "section",
+  "class": "header-section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo afbeelding"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 80,
+      "max": 240,
+      "step": 8,
+      "unit": "px",
+      "label": "Logo breedte",
+      "default": 160
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Navigatiemenu",
+      "default": "main-menu"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Header"
+    }
+  ]
+}
+{% endschema %}

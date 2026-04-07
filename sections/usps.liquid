@@ -1,0 +1,105 @@
+<section class="section usps" aria-label="Onze voordelen">
+  <div class="container">
+    {% if section.settings.title != blank %}
+      <div class="section-header section-header--center" style="margin-bottom:var(--space-xl);">
+        <h2 class="heading-md animate-fade-up">{{ section.settings.title }}</h2>
+      </div>
+    {% endif %}
+
+    <div class="usps__grid">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'usp' %}
+            <div class="usp-card animate-fade-up" data-delay="{{ forloop.index | times: 100 }}" {{ block.shopify_attributes }}>
+              <div class="usp-card__icon" aria-hidden="true">{{ block.settings.icon | default: '✓' }}</div>
+              <div class="usp-card__title">{{ block.settings.title }}</div>
+              {% if block.settings.text != blank %}
+                <p class="usp-card__text">{{ block.settings.text }}</p>
+              {% endif %}
+            </div>
+        {% endcase %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "USP's",
+  "tag": "section",
+  "class": "usps-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Sectietitel",
+      "default": "Waarom STRIDE?"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "usp",
+      "name": "Voordeel",
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Emoji/icoon",
+          "default": "🚀"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titel",
+          "default": "Snel geleverd"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Beschrijving",
+          "default": "Besteld voor 22:00, morgen in huis."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "USP's",
+      "blocks": [
+        {
+          "type": "usp",
+          "settings": {
+            "icon": "🚚",
+            "title": "Gratis verzending",
+            "text": "Gratis verzending bij bestellingen boven €75. Snel en betrouwbaar bezorgd."
+          }
+        },
+        {
+          "type": "usp",
+          "settings": {
+            "icon": "↩️",
+            "title": "30 dagen retour",
+            "text": "Niet tevreden? Retourneer eenvoudig binnen 30 dagen, geen vragen gesteld."
+          }
+        },
+        {
+          "type": "usp",
+          "settings": {
+            "icon": "🛡️",
+            "title": "2 jaar garantie",
+            "text": "Alle producten worden geleverd met 2 jaar fabrieksgarantie."
+          }
+        },
+        {
+          "type": "usp",
+          "settings": {
+            "icon": "💬",
+            "title": "Expert advies",
+            "text": "Ons team van experts staat klaar om je te helpen de perfecte schoen te vinden."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

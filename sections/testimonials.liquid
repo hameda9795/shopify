@@ -1,0 +1,179 @@
+<section class="section testimonials" aria-label="Klantbeoordelingen">
+  <div class="container">
+    <div class="section-header section-header--center">
+      <p class="eyebrow animate-fade-up">{{ section.settings.eyebrow | default: 'Klantbeoordelingen' }}</p>
+      <h2 class="heading-lg animate-fade-up" data-delay="100" style="margin-top:.5rem;">
+        {{ section.settings.title | default: 'Wat onze klanten zeggen' }}
+      </h2>
+      {% if section.settings.subtitle != blank %}
+        <p style="color:var(--color-mid);font-size:1rem;max-width:500px;margin:.75rem auto 0;line-height:1.7;" class="animate-fade-up" data-delay="200">
+          {{ section.settings.subtitle }}
+        </p>
+      {% endif %}
+      {% if section.settings.rating_summary %}
+        <div style="display:flex;align-items:center;justify-content:center;gap:.75rem;margin-top:1.25rem;" class="animate-fade-up" data-delay="300">
+          <div class="rating-stars" aria-label="4.9 van de 5 sterren">★★★★★</div>
+          <span style="font-size:.875rem;font-weight:700;color:var(--color-black);">4.9 / 5</span>
+          <span style="font-size:.875rem;color:var(--color-mid);">op basis van 312 beoordelingen</span>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="testimonials__grid">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'review' %}
+            <article class="testimonial-card animate-fade-up" data-delay="{{ forloop.index | times: 100 }}" {{ block.shopify_attributes }}>
+              <div class="testimonial-card__stars" aria-label="{{ block.settings.rating }} sterren">
+                {% assign stars = block.settings.rating | default: 5 %}
+                {% for i in (1..5) %}
+                  {% if i <= stars %}★{% else %}☆{% endif %}
+                {% endfor %}
+              </div>
+              <p class="testimonial-card__text">{{ block.settings.text }}</p>
+              <div class="testimonial-card__author">
+                <div class="testimonial-card__avatar" aria-hidden="true">
+                  {% if block.settings.avatar != blank %}
+                    {{ block.settings.avatar | image_url: width: 80 | image_tag: loading: 'lazy', alt: block.settings.name }}
+                  {% else %}
+                    {{ block.settings.name | slice: 0 }}
+                  {% endif %}
+                </div>
+                <div>
+                  <div class="testimonial-card__name">{{ block.settings.name }}</div>
+                  {% if block.settings.product != blank %}
+                    <div class="testimonial-card__product">{{ block.settings.product }}</div>
+                  {% endif %}
+                </div>
+              </div>
+              {% if block.settings.verified %}
+                <div class="testimonial-card__verified">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                    <path d="M7 1l1.5 2.5 3-.5-1 2.5 2 2-2.5.5.5 3L7 8.5 4.5 11l.5-3L2.5 7.5l2-2L3.5 3l3 .5L7 1z" fill="#27AE60"/>
+                  </svg>
+                  Geverifieerde koper
+                </div>
+              {% endif %}
+            </article>
+        {% endcase %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Beoordelingen",
+  "tag": "section",
+  "class": "testimonials-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Bovenste label",
+      "default": "Klantbeoordelingen"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Sectietitel",
+      "default": "Wat onze klanten zeggen"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Ondertitel",
+      "default": "Meer dan 2.000 tevreden hardlopers vertrouwen op STRIDE."
+    },
+    {
+      "type": "checkbox",
+      "id": "rating_summary",
+      "label": "Beoordelingsoverzicht tonen",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Beoordeling",
+      "settings": [
+        {
+          "type": "range",
+          "id": "rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "label": "Beoordeling",
+          "default": 5
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Tekst",
+          "default": "Geweldige schoenen, super comfortabel en snelle levering!"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Naam",
+          "default": "Jan de Boer"
+        },
+        {
+          "type": "text",
+          "id": "product",
+          "label": "Product",
+          "default": "Nike Air Zoom Pegasus 40"
+        },
+        {
+          "type": "image_picker",
+          "id": "avatar",
+          "label": "Profielfoto"
+        },
+        {
+          "type": "checkbox",
+          "id": "verified",
+          "label": "Geverifieerde koper",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Beoordelingen",
+      "blocks": [
+        {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "De Walk Set is echt fantastisch! Alles past perfect samen en de kwaliteit is uitstekend. Mijn beste aankoop dit jaar.",
+            "name": "Sophie van den Berg",
+            "product": "Walk Set — Complete Bundle",
+            "verified": true
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "Snelle levering, perfecte pasvorm en geweldig advies van het team. De ASICS zijn precies wat ik zocht.",
+            "name": "Thomas Mulder",
+            "product": "ASICS Gel-Kayano 30",
+            "verified": true
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "Eindelijk een webshop die begrijpt wat hardlopers nodig hebben. Retourneren was ook heel eenvoudig.",
+            "name": "Lisa Jansen",
+            "product": "New Balance Fresh Foam 1080v13",
+            "verified": true
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

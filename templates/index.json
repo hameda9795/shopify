@@ -1,0 +1,201 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "eyebrow": "Nieuw Seizoen 2025",
+        "title": "<p>Beweeg op<br><em>eigen</em> tempo.</p>",
+        "subtitle": "Premium hardloopschoenen van de beste merken. Samengesteld voor echte hardlopers die verder willen gaan.",
+        "cta_primary_text": "Ontdek collectie",
+        "cta_secondary_text": "Walk Set →",
+        "badge_text": "Nieuw binnen",
+        "show_stats": true
+      },
+      "blocks": {
+        "stat-1": {
+          "type": "stat",
+          "settings": { "number": "2000+", "label": "Tevreden klanten" }
+        },
+        "stat-2": {
+          "type": "stat",
+          "settings": { "number": "15+", "label": "Top merken" }
+        },
+        "stat-3": {
+          "type": "stat",
+          "settings": { "number": "4.9★", "label": "Gemiddelde score" }
+        }
+      },
+      "block_order": ["stat-1", "stat-2", "stat-3"]
+    },
+    "brands": {
+      "type": "brand-logos",
+      "settings": {
+        "label": "Officieel dealer van"
+      },
+      "blocks": {
+        "brand-1": { "type": "brand", "settings": { "name": "Nike" } },
+        "brand-2": { "type": "brand", "settings": { "name": "Adidas" } },
+        "brand-3": { "type": "brand", "settings": { "name": "New Balance" } },
+        "brand-4": { "type": "brand", "settings": { "name": "ASICS" } },
+        "brand-5": { "type": "brand", "settings": { "name": "Brooks" } },
+        "brand-6": { "type": "brand", "settings": { "name": "On Running" } },
+        "brand-7": { "type": "brand", "settings": { "name": "Hoka" } },
+        "brand-8": { "type": "brand", "settings": { "name": "Saucony" } }
+      },
+      "block_order": ["brand-1", "brand-2", "brand-3", "brand-4", "brand-5", "brand-6", "brand-7", "brand-8"]
+    },
+    "featured-products": {
+      "type": "featured-products",
+      "settings": {
+        "eyebrow": "Meest gevraagd",
+        "title": "Bestsellers",
+        "products_count": 4,
+        "view_all_text": "Bekijk alle producten"
+      }
+    },
+    "walk-set": {
+      "type": "walk-set-bundle",
+      "settings": {
+        "eyebrow": "Onze aanbeveling",
+        "title": "De Walk Set",
+        "description": "Alles wat je nodig hebt voor de perfecte wandeling. Onze experts hebben de beste producten gebundeld in één complete set — voor de beste prijs.",
+        "bundle_price": "€179,00",
+        "compare_price": "€219,00",
+        "savings_text": "Bespaar €40",
+        "cta_text": "Samentel jouw Walk Set"
+      },
+      "blocks": {
+        "item-1": {
+          "type": "item",
+          "settings": {
+            "icon": "👟",
+            "name": "Hardloopschoen",
+            "description": "Premium comfort, lichtgewicht ontwerp",
+            "price": "€129,00"
+          }
+        },
+        "item-2": {
+          "type": "item",
+          "settings": {
+            "icon": "🎽",
+            "name": "Sport riem",
+            "description": "Reflecterend, lichtgewicht, verstelbaar",
+            "price": "€49,00"
+          }
+        },
+        "item-3": {
+          "type": "item",
+          "settings": {
+            "icon": "🎒",
+            "name": "Looptas",
+            "description": "Waterbestendig, ergonomisch design",
+            "price": "€39,00"
+          }
+        }
+      },
+      "block_order": ["item-1", "item-2", "item-3"]
+    },
+    "usps": {
+      "type": "usps",
+      "settings": {
+        "title": "Waarom STRIDE?"
+      },
+      "blocks": {
+        "usp-1": {
+          "type": "usp",
+          "settings": {
+            "icon": "🚚",
+            "title": "Gratis verzending",
+            "text": "Gratis verzending bij bestellingen boven €75. Snel en betrouwbaar bezorgd."
+          }
+        },
+        "usp-2": {
+          "type": "usp",
+          "settings": {
+            "icon": "↩️",
+            "title": "30 dagen retour",
+            "text": "Niet tevreden? Retourneer eenvoudig binnen 30 dagen. Geen vragen gesteld."
+          }
+        },
+        "usp-3": {
+          "type": "usp",
+          "settings": {
+            "icon": "🛡️",
+            "title": "2 jaar garantie",
+            "text": "Alle producten worden geleverd met 2 jaar fabrieksgarantie."
+          }
+        },
+        "usp-4": {
+          "type": "usp",
+          "settings": {
+            "icon": "💬",
+            "title": "Expert advies",
+            "text": "Ons team van experts helpt je de perfecte schoen te vinden."
+          }
+        }
+      },
+      "block_order": ["usp-1", "usp-2", "usp-3", "usp-4"]
+    },
+    "testimonials": {
+      "type": "testimonials",
+      "settings": {
+        "eyebrow": "Klantbeoordelingen",
+        "title": "Wat onze klanten zeggen",
+        "subtitle": "Meer dan 2.000 tevreden hardlopers vertrouwen op STRIDE voor hun schoenen.",
+        "rating_summary": true
+      },
+      "blocks": {
+        "review-1": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "De Walk Set is echt fantastisch! Alles past perfect samen en de kwaliteit is uitstekend. Mijn beste aankoop dit jaar.",
+            "name": "Sophie van den Berg",
+            "product": "Walk Set — Complete Bundle",
+            "verified": true
+          }
+        },
+        "review-2": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "Snelle levering, perfecte pasvorm en geweldig advies van het team. De ASICS zijn precies wat ik zocht.",
+            "name": "Thomas Mulder",
+            "product": "ASICS Gel-Kayano 30",
+            "verified": true
+          }
+        },
+        "review-3": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "Eindelijk een webshop die begrijpt wat hardlopers nodig hebben. Retourneren was ook heel eenvoudig.",
+            "name": "Lisa Jansen",
+            "product": "New Balance Fresh Foam 1080v13",
+            "verified": true
+          }
+        }
+      },
+      "block_order": ["review-1", "review-2", "review-3"]
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "eyebrow": "Blijf op de hoogte",
+        "title": "Exclusieve aanbiedingen & nieuws",
+        "subtitle": "Ontvang als eerste nieuws over nieuwe collecties, exclusieve kortingen en hardlooptips van onze experts.",
+        "button_text": "Aanmelden",
+        "disclaimer": "Je kunt je altijd afmelden. We respecteren je privacy en sturen geen spam."
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "brands",
+    "featured-products",
+    "walk-set",
+    "usps",
+    "testimonials",
+    "newsletter"
+  ]
+}

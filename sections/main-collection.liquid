@@ -1,0 +1,117 @@
+<div class="collection-header">
+  <div class="container">
+    <div class="collection-header__inner">
+      <div>
+        {% if collection.image %}
+          <p class="eyebrow animate-fade-up">Collectie</p>
+        {% endif %}
+        <h1 class="heading-lg animate-fade-up" style="margin-top:.375rem;">{{ collection.title }}</h1>
+        {% if collection.description != blank %}
+          <p style="color:var(--color-mid);font-size:.9375rem;margin-top:.75rem;max-width:560px;line-height:1.7;" class="animate-fade-up" data-delay="100">
+            {{ collection.description | strip_html | truncate: 200 }}
+          </p>
+        {% endif %}
+      </div>
+      <span class="collection-count animate-fade-up">{{ collection.products_count }} producten</span>
+    </div>
+
+    {%- comment -%} Filters / Sort {%- endcomment -%}
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-top:1.5rem;">
+      <div class="collection-filters" role="group" aria-label="Filters">
+        <button class="filter-btn active" data-filter="all">Alles</button>
+        <button class="filter-btn" data-filter="new">Nieuw</button>
+        <button class="filter-btn" data-filter="sale">Sale</button>
+        {% for tag in collection.all_tags limit: 5 %}
+          <button class="filter-btn" data-filter="{{ tag | handleize }}">{{ tag }}</button>
+        {% endfor %}
+      </div>
+
+      <div style="display:flex;align-items:center;gap:.75rem;">
+        <label for="sort-select" class="eyebrow" style="white-space:nowrap;">Sorteren op:</label>
+        <select id="sort-select" class="sort-select" onchange="window.location.href = '{{ collection.url }}?sort_by=' + this.value" aria-label="Sorteervolgorde">
+          <option value="manual"{% if collection.sort_by == 'manual' %} selected{% endif %}>Aanbevolen</option>
+          <option value="best-selling"{% if collection.sort_by == 'best-selling' %} selected{% endif %}>Bestsellers</option>
+          <option value="price-ascending"{% if collection.sort_by == 'price-ascending' %} selected{% endif %}>Prijs: laag–hoog</option>
+          <option value="price-descending"{% if collection.sort_by == 'price-descending' %} selected{% endif %}>Prijs: hoog–laag</option>
+          <option value="created-descending"{% if collection.sort_by == 'created-descending' %} selected{% endif %}>Nieuwste</option>
+          <option value="title-ascending"{% if collection.sort_by == 'title-ascending' %} selected{% endif %}>A–Z</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="section" style="padding-top:var(--space-lg);">
+  <div class="container">
+    {% paginate collection.products by section.settings.products_per_page %}
+
+      {% if collection.products.size > 0 %}
+        <div class="products-grid" role="list" aria-label="Producten">
+          {% for product in collection.products %}
+            <div role="listitem">
+              {%- render 'product-card', product: product -%}
+            </div>
+          {% endfor %}
+        </div>
+
+        {%- comment -%} Pagination {%- endcomment -%}
+        {% if paginate.pages > 1 %}
+          <nav class="pagination" aria-label="Paginering" style="margin-top:var(--space-2xl);display:flex;align-items:center;justify-content:center;gap:.5rem;">
+            {% if paginate.previous %}
+              <a href="{{ paginate.previous.url }}" class="btn btn-outline btn-sm" aria-label="Vorige pagina">← Vorige</a>
+            {% endif %}
+
+            {% for part in paginate.parts %}
+              {% if part.is_link %}
+                <a href="{{ part.url }}" class="btn btn-sm" style="{% if part.title == paginate.current_page %}background:var(--color-black);color:white;{% else %}background:var(--color-bg);{% endif %}border:1.5px solid var(--color-border);">
+                  {{ part.title }}
+                </a>
+              {% elsif part.title == '…' %}
+                <span style="color:var(--color-mid);padding:0 .5rem;">…</span>
+              {% else %}
+                <span class="btn btn-sm" style="background:var(--color-black);color:white;border:1.5px solid var(--color-black);">{{ part.title }}</span>
+              {% endif %}
+            {% endfor %}
+
+            {% if paginate.next %}
+              <a href="{{ paginate.next.url }}" class="btn btn-outline btn-sm" aria-label="Volgende pagina">Volgende →</a>
+            {% endif %}
+          </nav>
+        {% endif %}
+
+      {% else %}
+        <div style="text-align:center;padding:var(--space-4xl) 0;">
+          <div style="font-size:4rem;margin-bottom:1rem;" aria-hidden="true">🔍</div>
+          <h2 style="font-size:1.5rem;font-weight:700;margin-bottom:.75rem;">Geen producten gevonden</h2>
+          <p style="color:var(--color-mid);margin-bottom:1.5rem;">Probeer andere filters of zoek in onze volledige collectie.</p>
+          <a href="/collections/all" class="btn btn-primary">Bekijk alle producten</a>
+        </div>
+      {% endif %}
+
+    {% endpaginate %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collectiepagina",
+  "tag": "section",
+  "class": "main-collection-section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "label": "Producten per pagina",
+      "default": 24
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collectiepagina"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,90 @@
+<section class="section featured-products" id="featured-products">
+  <div class="container">
+    <div class="section-header section-header--flex">
+      <div>
+        {% if section.settings.eyebrow != blank %}
+          <p class="eyebrow animate-fade-up">{{ section.settings.eyebrow }}</p>
+        {% endif %}
+        <h2 class="heading-lg animate-fade-up" data-delay="100" style="margin-top:.5rem;">
+          {{ section.settings.title | default: 'Bestsellers' }}
+        </h2>
+      </div>
+      {% if section.settings.view_all_text != blank and section.settings.collection != blank %}
+        <a href="{{ section.settings.collection.url }}" class="btn btn-outline btn-sm animate-fade-up hide-mobile">
+          {{ section.settings.view_all_text }}
+        </a>
+      {% endif %}
+    </div>
+
+    {%- assign collection = section.settings.collection -%}
+    {%- assign product_limit = section.settings.products_count | default: 4 -%}
+
+    {% if collection != blank and collection.products.size > 0 %}
+      <div class="products-scroll">
+        {% for product in collection.products limit: product_limit %}
+          {%- render 'product-card', product: product -%}
+        {% endfor %}
+      </div>
+    {% else %}
+      {%- comment -%} Fallback: render placeholders in theme editor {%- endcomment -%}
+      <div class="products-scroll">
+        {% for i in (1..4) %}
+          {%- render 'product-card-placeholder', index: i -%}
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% if section.settings.view_all_text != blank and section.settings.collection != blank %}
+      <div style="text-align:center;margin-top:2rem;" class="hide-desktop">
+        <a href="{{ section.settings.collection.url }}" class="btn btn-outline">{{ section.settings.view_all_text }}</a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Uitgelichte producten",
+  "tag": "section",
+  "class": "featured-products-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Bovenste label",
+      "default": "Meest gevraagd"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Sectietitel",
+      "default": "Bestsellers"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collectie"
+    },
+    {
+      "type": "range",
+      "id": "products_count",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "label": "Aantal producten",
+      "default": 4
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "Bekijk alles tekst",
+      "default": "Bekijk alles"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Uitgelichte producten"
+    }
+  ]
+}
+{% endschema %}

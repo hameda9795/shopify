@@ -1,0 +1,15 @@
+{% layout 'theme' %}
+
+<section class="section">
+  <div class="container" style="max-width:780px;">
+    <nav class="breadcrumb">
+      <a href="{{ routes.root_url }}">Home</a>
+      <span class="breadcrumb__sep">/</span>
+      <span aria-current="page">{{ page.title }}</span>
+    </nav>
+    <h1 class="heading-lg" style="margin-bottom:var(--space-xl);">{{ page.title }}</h1>
+    <div class="accordion-body" style="font-size:1rem;line-height:1.8;">
+      {{ page.content }}
+    </div>
+  </div>
+</section>

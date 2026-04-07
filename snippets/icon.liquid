@@ -1,0 +1,80 @@
+{%- comment -%}
+  Render an SVG icon
+  Accepts:
+  - icon: {String} Icon name
+  - size: {Number} Size in px (default: 20)
+  - class: {String} Additional CSS class
+{%- endcomment -%}
+
+{%- liquid
+  assign size = size | default: 20
+-%}
+
+{%- case icon -%}
+  {%- when 'search' -%}
+    <svg width="{{ size }}" height="{{ size }}" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="{{ class }}" aria-hidden="true" focusable="false">
+      <circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M13.5 13.5L17 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+
+  {%- when 'cart' -%}
+    <svg width="{{ size }}" height="{{ size }}" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="{{ class }}" aria-hidden="true" focusable="false">
+      <path d="M2 2h1.5l2.2 9h9.1l2-7H5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="8" cy="17" r="1" fill="currentColor"/>
+      <circle cx="14" cy="17" r="1" fill="currentColor"/>
+    </svg>
+
+  {%- when 'account' -%}
+    <svg width="{{ size }}" height="{{ size }}" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="{{ class }}" aria-hidden="true" focusable="false">
+      <circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M3 18c0-3.87 3.13-7 7-7s7 3.13 7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+
+  {%- when 'close' -%}
+    <svg width="{{ size }}" height="{{ size }}" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="{{ class }}" aria-hidden="true" focusable="false">
+      <path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+
+  {%- when 'arrow-up' -%}
+    <svg width="{{ size }}" height="{{ size }}" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="{{ class }}" aria-hidden="true" focusable="false">
+      <path d="M10 16V4M4 10l6-6 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+
+  {%- when 'arrow-right' -%}
+    <svg width="{{ size }}" height="{{ size }}" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="{{ class }}" aria-hidden="true" focusable="false">
+      <path d="M4 10h12M10 4l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+
+  {%- when 'check' -%}
+    <svg width="{{ size }}" height="{{ size }}" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="{{ class }}" aria-hidden="true" focusable="false">
+      <path d="M4 10l5 5 7-8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+
+  {%- when 'menu' -%}
+    <svg width="{{ size }}" height="{{ size }}" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="{{ class }}" aria-hidden="true" focusable="false">
+      <path d="M3 6h14M3 10h14M3 14h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+
+  {%- when 'chevron-down' -%}
+    <svg width="{{ size }}" height="{{ size }}" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="{{ class }}" aria-hidden="true" focusable="false">
+      <path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+
+  {%- when 'star' -%}
+    <svg width="{{ size }}" height="{{ size }}" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" class="{{ class }}" aria-hidden="true" focusable="false">
+      <path d="M10 1l2.4 7.4H20l-6.2 4.5 2.4 7.4L10 16l-6.2 4.3 2.4-7.4L0 8.4h7.6z"/>
+    </svg>
+
+  {%- when 'truck' -%}
+    <svg width="{{ size }}" height="{{ size }}" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="{{ class }}" aria-hidden="true" focusable="false">
+      <rect x="1" y="5" width="12" height="9" rx="1" stroke="currentColor" stroke-width="1.4"/>
+      <path d="M13 7h3.5l2.5 4v3h-6V7z" stroke="currentColor" stroke-width="1.4"/>
+      <circle cx="5" cy="16" r="1.5" fill="currentColor"/>
+      <circle cx="15" cy="16" r="1.5" fill="currentColor"/>
+    </svg>
+
+  {%- else -%}
+    <svg width="{{ size }}" height="{{ size }}" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="{{ class }}" aria-hidden="true" focusable="false">
+      <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/>
+    </svg>
+{%- endcase -%}

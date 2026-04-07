@@ -1,0 +1,220 @@
+<section class="hero" aria-label="Hero sectie">
+
+  {%- comment -%} Left: Content {%- endcomment -%}
+  <div class="hero__content">
+    <div class="hero__eyebrow animate-fade-up">
+      <span class="hero__eyebrow-line" aria-hidden="true"></span>
+      <span class="eyebrow">{{ section.settings.eyebrow | default: 'Nieuw Seizoen' }}</span>
+    </div>
+
+    <h1 class="hero__title animate-fade-up" data-delay="100">
+      {{ section.settings.title | default: 'Beweeg op<br><em>eigen</em> tempo.' | newline_to_br }}
+    </h1>
+
+    <p class="hero__subtitle animate-fade-up" data-delay="200">
+      {{ section.settings.subtitle | default: 'Premium hardloopschoenen van de beste merken. Ontdek onze collectie — samengesteld voor echte hardlopers.' }}
+    </p>
+
+    <div class="hero__actions animate-fade-up" data-delay="300">
+      {% if section.settings.cta_primary_text != blank %}
+        <a href="{{ section.settings.cta_primary_link | default: '/collections/all' }}" class="btn btn-primary btn-lg">
+          {{ section.settings.cta_primary_text }}
+        </a>
+      {% endif %}
+      {% if section.settings.cta_secondary_text != blank %}
+        <a href="{{ section.settings.cta_secondary_link | default: '/collections/walk-set' }}" class="btn btn-outline btn-lg">
+          {{ section.settings.cta_secondary_text }}
+        </a>
+      {% endif %}
+    </div>
+
+    {% if section.settings.show_stats %}
+      <div class="hero__stats animate-fade-up" data-delay="400" aria-label="Statistieken">
+        {% for block in section.blocks %}
+          {% case block.type %}
+            {% when 'stat' %}
+              <div class="hero__stat" {{ block.shopify_attributes }}>
+                <div class="hero__stat-number" aria-label="{{ block.settings.number }} {{ block.settings.label }}">
+                  {{ block.settings.number }}
+                </div>
+                <div class="hero__stat-label">{{ block.settings.label }}</div>
+              </div>
+          {% endcase %}
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="hero__scroll-indicator" aria-hidden="true">
+      <div class="hero__scroll-line"></div>
+      <span class="eyebrow">Scroll</span>
+    </div>
+  </div>
+
+  {%- comment -%} Right: Media {%- endcomment -%}
+  <div class="hero__media">
+    {% if section.settings.video != blank %}
+      <video
+        src="{{ section.settings.video }}"
+        autoplay
+        muted
+        loop
+        playsinline
+        aria-hidden="true"
+        poster="{{ section.settings.image | image_url: width: 1200 }}"
+      ></video>
+    {% elsif section.settings.image != blank %}
+      {{ section.settings.image | image_url: width: 1400 | image_tag:
+        loading: 'eager',
+        fetchpriority: 'high',
+        alt: section.settings.image_alt | default: shop.name,
+        class: 'hero__media-img',
+        sizes: '(min-width: 1024px) 50vw, 100vw'
+      }}
+    {% else %}
+      <div style="width:100%;height:100%;background:linear-gradient(135deg,#1a1a1a,#3a3a3a);display:flex;align-items:center;justify-content:center;">
+        <span style="color:rgba(255,255,255,0.2);font-size:8rem;" aria-hidden="true">👟</span>
+      </div>
+    {% endif %}
+    <div class="hero__media-overlay" aria-hidden="true"></div>
+
+    {% if section.settings.badge_text != blank %}
+      <div class="hero__badge" aria-label="{{ section.settings.badge_text }}">
+        <div class="hero__badge-inner">{{ section.settings.badge_text }}</div>
+      </div>
+    {% endif %}
+  </div>
+
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "tag": "section",
+  "class": "hero-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Bovenste label",
+      "default": "Nieuw Seizoen 2025"
+    },
+    {
+      "type": "richtext",
+      "id": "title",
+      "label": "Hoofdtitel",
+      "default": "<p>Beweeg op<br><em>eigen</em> tempo.</p>"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Ondertitel",
+      "default": "Premium hardloopschoenen van de beste merken. Samengesteld voor echte hardlopers."
+    },
+    {
+      "type": "header",
+      "content": "Knoppen"
+    },
+    {
+      "type": "text",
+      "id": "cta_primary_text",
+      "label": "Primaire knoptekst",
+      "default": "Bekijk collectie"
+    },
+    {
+      "type": "url",
+      "id": "cta_primary_link",
+      "label": "Primaire koppeling"
+    },
+    {
+      "type": "text",
+      "id": "cta_secondary_text",
+      "label": "Secundaire knoptekst",
+      "default": "Walk Set"
+    },
+    {
+      "type": "url",
+      "id": "cta_secondary_link",
+      "label": "Secundaire koppeling"
+    },
+    {
+      "type": "header",
+      "content": "Afbeelding / Video"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Hero afbeelding"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Alternatieve tekst afbeelding"
+    },
+    {
+      "type": "video_url",
+      "id": "video",
+      "label": "Video URL (optioneel)",
+      "accept": ["mp4", "webm"]
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge tekst",
+      "default": "Nieuw Binnen"
+    },
+    {
+      "type": "header",
+      "content": "Statistieken"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stats",
+      "label": "Statistieken tonen",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Statistiek",
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Getal/waarde",
+          "default": "2000+"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Klanten"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero",
+      "blocks": [
+        {
+          "type": "stat",
+          "settings": { "number": "2000+", "label": "Tevreden klanten" }
+        },
+        {
+          "type": "stat",
+          "settings": { "number": "15+", "label": "Top merken" }
+        },
+        {
+          "type": "stat",
+          "settings": { "number": "4.9★", "label": "Beoordeling" }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,108 @@
+{%- comment -%}
+  Renders a product card
+  Accepts:
+  - product: {Object} Product object
+  - lazy: {Boolean} Lazy load image (default: true)
+{%- endcomment -%}
+
+{%- assign lazy = lazy | default: true -%}
+{%- assign first_variant = product.selected_or_first_available_variant -%}
+{%- assign on_sale = false -%}
+{%- if first_variant.compare_at_price > first_variant.price -%}
+  {%- assign on_sale = true -%}
+{%- endif -%}
+
+<article class="product-card" aria-label="{{ product.title }}">
+  <a href="{{ product.url }}" class="product-card__media-link" tabindex="-1" aria-hidden="true">
+    <div class="product-card__media">
+      {%- comment -%} Badges {%- endcomment -%}
+      <div class="product-card__badges">
+        {%- if product.created_at > 'now' | date: '%s' | minus: 2592000 | date: '%Y-%m-%dT%H:%M:%SZ' -%}
+          <span class="badge badge-new" aria-label="Nieuw product">Nieuw</span>
+        {%- endif -%}
+        {%- if on_sale -%}
+          <span class="badge badge-sale" aria-label="Sale">
+            -{{ first_variant.compare_at_price | minus: first_variant.price | times: 100 | divided_by: first_variant.compare_at_price }}%
+          </span>
+        {%- endif -%}
+        {%- if product.tags contains 'bestseller' -%}
+          <span class="badge badge-bestseller">Bestseller</span>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Primary image {%- endcomment -%}
+      {% if product.featured_image %}
+        {{ product.featured_image | image_url: width: 600 | image_tag:
+          loading: lazy | then: 'lazy' | else: 'eager',
+          alt: product.featured_image.alt | default: product.title,
+          sizes: '(min-width: 1200px) 25vw, (min-width: 768px) 33vw, 72vw'
+        }}
+      {% else %}
+        {{ 'product-1' | placeholder_svg_tag }}
+      {% endif %}
+
+      {%- comment -%} Secondary image (hover) {%- endcomment -%}
+      {% if product.images.size > 1 %}
+        <div class="product-card__media-secondary" aria-hidden="true">
+          {{ product.images[1] | image_url: width: 600 | image_tag:
+            loading: 'lazy',
+            alt: product.images[1].alt | default: product.title
+          }}
+        </div>
+      {% endif %}
+
+      {%- comment -%} Quick add {%- endcomment -%}
+      <div class="product-card__quick-add">
+        <button
+          class="btn btn-white btn-sm btn-full"
+          onclick="window.location.href='{{ product.url }}'"
+          aria-label="{{ product.title }} bekijken"
+        >
+          Bekijk product
+        </button>
+      </div>
+    </div>
+  </a>
+
+  <div class="product-card__info">
+    {% if product.vendor != blank %}
+      <p class="product-card__brand">{{ product.vendor }}</p>
+    {% endif %}
+
+    <h3 class="product-card__title">
+      <a href="{{ product.url }}">{{ product.title }}</a>
+    </h3>
+
+    <div class="product-card__pricing">
+      <span class="product-card__price{% if on_sale %} product-card__price--sale{% endif %}">
+        {{ first_variant.price | money }}
+      </span>
+      {% if on_sale %}
+        <span class="product-card__price--compare" aria-label="Was {{ first_variant.compare_at_price | money }}">
+          {{ first_variant.compare_at_price | money }}
+        </span>
+      {% endif %}
+    </div>
+
+    {%- comment -%} Color swatches {%- endcomment -%}
+    {%- assign color_option = product.options_with_values | where: "name", "Kleur" | first -%}
+    {%- unless color_option == nil -%}
+      {%- assign color_option = product.options_with_values | where: "name", "Color" | first -%}
+    {%- endunless -%}
+    {% if color_option and color_option.values.size > 1 %}
+      <div class="product-card__colors" aria-label="Beschikbare kleuren">
+        {% for value in color_option.values limit: 5 %}
+          <button
+            class="color-swatch{% if forloop.first %} active{% endif %}"
+            style="background-color: {{ value | downcase | replace: ' ', '' }};"
+            aria-label="{{ value }}"
+            title="{{ value }}"
+          ></button>
+        {% endfor %}
+        {% if color_option.values.size > 5 %}
+          <span class="product-card__colors-more">+{{ color_option.values.size | minus: 5 }}</span>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</article>

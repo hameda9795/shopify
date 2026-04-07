@@ -1,0 +1,94 @@
+<section class="brands" aria-label="Merken">
+  <div class="container">
+    <p class="brands__label eyebrow animate-fade-up">{{ section.settings.label | default: 'Officieel dealer van' }}</p>
+  </div>
+
+  <div class="brands__track-wrapper">
+    <div class="brands__track" aria-hidden="true">
+      {% comment %} First pass {% endcomment %}
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'brand' %}
+            <div class="brands__logo" {{ block.shopify_attributes }}>
+              {% if block.settings.logo != blank %}
+                {{ block.settings.logo | image_url: height: 40 | image_tag:
+                  loading: 'lazy',
+                  alt: block.settings.name,
+                  style: 'height:32px;width:auto;'
+                }}
+              {% else %}
+                <span class="brands__logo-text">{{ block.settings.name }}</span>
+              {% endif %}
+            </div>
+        {% endcase %}
+      {% endfor %}
+      {% comment %} Duplicate for seamless loop {% endcomment %}
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'brand' %}
+            <div class="brands__logo" aria-hidden="true">
+              {% if block.settings.logo != blank %}
+                {{ block.settings.logo | image_url: height: 40 | image_tag:
+                  loading: 'lazy',
+                  alt: '',
+                  style: 'height:32px;width:auto;'
+                }}
+              {% else %}
+                <span class="brands__logo-text">{{ block.settings.name }}</span>
+              {% endif %}
+            </div>
+        {% endcase %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Merken",
+  "tag": "section",
+  "class": "brands-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label tekst",
+      "default": "Officieel dealer van"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "brand",
+      "name": "Merk",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Merknaam",
+          "default": "Nike"
+        },
+        {
+          "type": "image_picker",
+          "id": "logo",
+          "label": "Logo"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Merken",
+      "blocks": [
+        { "type": "brand", "settings": { "name": "Nike" } },
+        { "type": "brand", "settings": { "name": "Adidas" } },
+        { "type": "brand", "settings": { "name": "New Balance" } },
+        { "type": "brand", "settings": { "name": "ASICS" } },
+        { "type": "brand", "settings": { "name": "Brooks" } },
+        { "type": "brand", "settings": { "name": "On Running" } },
+        { "type": "brand", "settings": { "name": "Hoka" } },
+        { "type": "brand", "settings": { "name": "Saucony" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

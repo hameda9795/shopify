@@ -1,0 +1,216 @@
+<section class="walk-set" id="walk-set" aria-label="Walk Set bundel">
+  <div class="container">
+    <div class="walk-set__inner">
+
+      {%- comment -%} Left: Info & Items {%- endcomment -%}
+      <div class="walk-set__text">
+        <p class="eyebrow walk-set__eyebrow animate-fade-up">{{ section.settings.eyebrow | default: 'Onze aanbeveling' }}</p>
+
+        <h2 class="heading-lg walk-set__title animate-fade-up" data-delay="100">
+          {{ section.settings.title | default: 'De Walk Set' }}
+        </h2>
+
+        <p class="walk-set__description animate-fade-up" data-delay="200">
+          {{ section.settings.description | default: 'Alles wat je nodig hebt voor de perfecte wandeling — gebundeld voor de beste prijs. Professionele kwaliteit, slimme combinatie.' }}
+        </p>
+
+        <div class="walk-set__items animate-fade-up" data-delay="300">
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'item' %}
+                <div class="walk-set__item" {{ block.shopify_attributes }}>
+                  <div class="walk-set__item-icon" aria-hidden="true">{{ block.settings.icon | default: '👟' }}</div>
+                  <div class="walk-set__item-info">
+                    <div class="walk-set__item-name">{{ block.settings.name }}</div>
+                    <div class="walk-set__item-desc">{{ block.settings.description }}</div>
+                  </div>
+                  <div class="walk-set__item-price">{{ block.settings.price }}</div>
+                </div>
+            {% endcase %}
+          {% endfor %}
+        </div>
+
+        <div class="walk-set__pricing animate-fade-up" data-delay="400">
+          <div>
+            <div class="walk-set__total-label">Bundel prijs</div>
+            <div class="walk-set__total-price">{{ section.settings.bundle_price | default: '€179,00' }}</div>
+            {% if section.settings.compare_price != blank %}
+              <div class="walk-set__compare-price">{{ section.settings.compare_price }}</div>
+            {% endif %}
+          </div>
+          {% if section.settings.savings_text != blank %}
+            <div class="walk-set__savings" aria-label="{{ section.settings.savings_text }}">{{ section.settings.savings_text }}</div>
+          {% endif %}
+        </div>
+
+        <div class="animate-fade-up" data-delay="500">
+          <a
+            href="{{ section.settings.cta_link | default: '/collections/walk-set' }}"
+            class="btn btn-white btn-lg"
+            style="display:inline-flex;gap:.625rem;"
+          >
+            {{ section.settings.cta_text | default: 'Bekijk Walk Set' }}
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      {%- comment -%} Right: Media {%- endcomment -%}
+      <div class="walk-set__media animate-fade-in" data-delay="200">
+        {% if section.settings.image != blank %}
+          {{ section.settings.image | image_url: width: 900 | image_tag:
+            loading: 'lazy',
+            alt: section.settings.title | default: 'Walk Set',
+            sizes: '(min-width: 1024px) 45vw, 100vw'
+          }}
+        {% else %}
+          <div style="width:100%;height:100%;background:linear-gradient(135deg,#1a1a1a 0%,#3d3d3d 100%);display:flex;align-items:center;justify-content:center;border-radius:24px;">
+            <div style="text-align:center;color:rgba(255,255,255,0.4);">
+              <div style="font-size:5rem;margin-bottom:1rem;">👟🎒</div>
+              <p style="font-size:.875rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;">Walk Set</p>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Walk Set Bundel",
+  "tag": "section",
+  "class": "walk-set-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Bovenste label",
+      "default": "Onze aanbeveling"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titel",
+      "default": "De Walk Set"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Beschrijving",
+      "default": "Alles wat je nodig hebt voor de perfecte wandeling — gebundeld voor de beste prijs."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Afbeelding"
+    },
+    {
+      "type": "header",
+      "content": "Prijzen"
+    },
+    {
+      "type": "text",
+      "id": "bundle_price",
+      "label": "Bundel prijs",
+      "default": "€179,00"
+    },
+    {
+      "type": "text",
+      "id": "compare_price",
+      "label": "Vergelijkingsprijs (doorgestreept)",
+      "default": "€219,00"
+    },
+    {
+      "type": "text",
+      "id": "savings_text",
+      "label": "Besparingen badge",
+      "default": "Bespaar €40"
+    },
+    {
+      "type": "header",
+      "content": "Knop"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Knoptekst",
+      "default": "Bekijk Walk Set"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Koppeling"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Bundel item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Emoji icoon",
+          "default": "👟"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Productnaam",
+          "default": "Hardloopschoen"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Korte beschrijving",
+          "default": "Premium comfort, lichtgewicht ontwerp"
+        },
+        {
+          "type": "text",
+          "id": "price",
+          "label": "Prijs",
+          "default": "€129,00"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Walk Set Bundel",
+      "blocks": [
+        {
+          "type": "item",
+          "settings": {
+            "icon": "👟",
+            "name": "Hardloopschoen",
+            "description": "Premium comfort, lichtgewicht ontwerp",
+            "price": "€129,00"
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "icon": "🎽",
+            "name": "Sport riem",
+            "description": "Reflecterend, lichtgewicht, verstelbaar",
+            "price": "€49,00"
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "icon": "🎒",
+            "name": "Looptas",
+            "description": "Waterbestendig, ergonomisch design",
+            "price": "€39,00"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,93 @@
+{% if section.settings.enabled %}
+<div class="announcement-bar" role="banner" aria-label="Aankondigingen">
+  <div class="announcement-bar__inner">
+    {% for block in section.blocks %}
+      {% case block.type %}
+        {% when 'message' %}
+          <div class="announcement-bar__item" {{ block.shopify_attributes }}>
+            {% if block.settings.icon != blank %}
+              <span aria-hidden="true">{{ block.settings.icon }}</span>
+            {% endif %}
+            {% if block.settings.link != blank %}
+              <a href="{{ block.settings.link }}">{{ block.settings.text }}</a>
+            {% else %}
+              <span>{{ block.settings.text }}</span>
+            {% endif %}
+          </div>
+          {% unless forloop.last %}
+            <span class="announcement-bar__separator" aria-hidden="true"></span>
+          {% endunless %}
+      {% endcase %}
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Aankondigingsbalk",
+  "tag": "section",
+  "class": "announcement-bar-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enabled",
+      "label": "Balk weergeven",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "message",
+      "name": "Bericht",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Tekst",
+          "default": "🚚 Gratis verzending bij bestellingen boven €75"
+        },
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Emoji/icoon",
+          "default": "🚚"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link (optioneel)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Aankondigingsbalk",
+      "blocks": [
+        {
+          "type": "message",
+          "settings": {
+            "text": "🚚 Gratis verzending bij bestellingen boven €75",
+            "icon": "🚚"
+          }
+        },
+        {
+          "type": "message",
+          "settings": {
+            "text": "↩️ 30 dagen retourrecht",
+            "icon": "↩️"
+          }
+        },
+        {
+          "type": "message",
+          "settings": {
+            "text": "⭐ Meer dan 2.000 tevreden klanten",
+            "icon": "⭐"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
