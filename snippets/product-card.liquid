@@ -17,7 +17,7 @@
     <div class="product-card__media">
       {%- comment -%} Badges {%- endcomment -%}
       <div class="product-card__badges">
-        {%- if product.created_at > 'now' | date: '%s' | minus: 2592000 | date: '%Y-%m-%dT%H:%M:%SZ' -%}
+        {%- if product.tags contains 'nieuw' or product.tags contains 'new' -%}
           <span class="badge badge-new" aria-label="Nieuw product">Nieuw</span>
         {%- endif -%}
         {%- if on_sale -%}
